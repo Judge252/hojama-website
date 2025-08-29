@@ -1,3 +1,74 @@
+let slideIndex = 0;
+let slideInterval;
+
+document.addEventListener('DOMContentLoaded', function() {
+    const dotsContainer = document.querySelector('.dots-container');
+    const slides = document.querySelectorAll('.slide');
+    const track = document.querySelector('.slideshow-track');
+
+    if (!slides.length) return;
+
+    // Create dots
+    slides.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.className = 'dot' + (i === 0 ? ' active' : '');
+        dot.onclick = () => currentSlide(i);
+        dotsContainer.appendChild(dot);
+    });
+
+    // Make first slide active
+    slides[0].classList.add('active');
+
+    // Initialize slideshow
+    startSlideshow();
+
+    // Pause on hover
+    track.addEventListener('mouseenter', pauseSlideshow);
+    track.addEventListener('mouseleave', startSlideshow);
+});
+
+function moveSlide(n) {
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+    const totalSlides = slides.length;
+
+    slideIndex += n;
+
+    // Handle wraparound
+    if (slideIndex >= totalSlides) {
+        slideIndex = 0;
+    }
+    if (slideIndex < 0) {
+        slideIndex = totalSlides - 1;
+    }
+
+    // Move track
+    const track = document.querySelector('.slideshow-track');
+    track.style.transform = `translateX(${-slideIndex * 100 / 3}%)`;
+
+    // Update active states
+    slides.forEach(slide => slide.classList.remove('active'));
+    dots.forEach(dot => dot.classList.remove('active'));
+
+    slides[slideIndex].classList.add('active');
+    dots[slideIndex].classList.add('active');
+}
+
+function currentSlide(n) {
+    slideIndex = n - 1;
+    moveSlide(1);
+}
+
+function startSlideshow() {
+    pauseSlideshow(); // Clear any existing interval
+    slideInterval = setInterval(() => moveSlide(1), 5000);
+}
+
+function pauseSlideshow() {
+    if (slideInterval) {
+        clearInterval(slideInterval);
+    }
+}
 // Smooth scrolling for navigation links
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   anchor.addEventListener("click", function (e) {
