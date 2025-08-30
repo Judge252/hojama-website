@@ -44,7 +44,7 @@ function moveSlide(n) {
 
     // Move track
     const track = document.querySelector('.slideshow-track');
-    track.style.transform = `translateX(${-slideIndex * 100 / 3}%)`;
+    track.style.transform = `translateX(${-slideIndex * 100 / 7}%)`;
 
     // Update active states
     slides.forEach(slide => slide.classList.remove('active'));
